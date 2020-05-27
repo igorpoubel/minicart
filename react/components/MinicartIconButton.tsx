@@ -3,24 +3,32 @@ import { ButtonWithIcon } from 'vtex.styleguide'
 import { IconCart } from 'vtex.store-icons'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
 import { useCssHandles } from 'vtex.css-handles'
+import { FormattedPrice } from 'vtex.formatted-price'
 
 import { useMinicartDispatch, useMinicartState } from '../MinicartContext'
 import styles from '../styles.css'
 
-const CSS_HANDLES = ['minicartIconContainer', 'minicartQuantityBadge'] as const
+const CSS_HANDLES = [
+  'minicartIconContainer',
+  'minicartQuantityBadge',
+  'minicartTotalizer',
+] as const
 
 interface MinicartIconButtonProps {
   quantityDisplay: MinicartIconButtonType
+  showTotalizer?: boolean
 }
 
 const MinicartIconButton: FC<MinicartIconButtonProps> = ({
   quantityDisplay,
+  showTotalizer,
 }) => {
   const { orderForm, loading }: OrderFormContext = useOrderForm()
   const handles = useCssHandles(CSS_HANDLES)
   const { open, openBehavior, openOnHoverProp } = useMinicartState()
   const dispatch = useMinicartDispatch()
   const itemQuantity = loading ? 0 : orderForm.items.length
+  showTotalizer = showTotalizer === true
 
   const handleClick = () => {
     if (openOnHoverProp) {
@@ -48,17 +56,28 @@ const MinicartIconButton: FC<MinicartIconButtonProps> = ({
   return (
     <ButtonWithIcon
       icon={
-        <span className={`${handles.minicartIconContainer} gray relative`}>
-          <IconCart />
-          {showQuantityBadge && (
-            <span
-              style={{ userSelect: 'none' }}
-              className={`${handles.minicartQuantityBadge} ${styles.minicartQuantityBadgeDefault} c-on-emphasis absolute t-mini bg-emphasis br4 w1 h1 pa1 flex justify-center items-center lh-solid`}
-            >
-              {itemQuantity}
+        <>
+          <span className={`${handles.minicartIconContainer} gray relative`}>
+            <IconCart />
+            {showQuantityBadge && (
+              <span
+                style={{ userSelect: 'none' }}
+                className={`${handles.minicartQuantityBadge} ${styles.minicartQuantityBadgeDefault} c-on-emphasis absolute t-mini bg-emphasis br4 w1 h1 pa1 flex justify-center items-center lh-solid`}
+              >
+                {itemQuantity}
+              </span>
+            )}
+          </span>
+          {showTotalizer && (
+            <span className={`${handles.minicartTotalizer} gray relative`}>
+              <FormattedPrice
+                value={
+                  orderForm.value ? orderForm.value / 100 : orderForm.value
+                }
+              />
             </span>
           )}
-        </span>
+        </>
       }
       variation="tertiary"
       onMouseEnter={
