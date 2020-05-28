@@ -24,3 +24,11 @@
 .popupArrowUp {
   right: 7px;
 }
+
+.minicartTitleIcon {
+  display: inline-flex;
+}
+.minicartTitleIcon .cartIcon {
+  width: 22px;
+  height: 22px;
+}

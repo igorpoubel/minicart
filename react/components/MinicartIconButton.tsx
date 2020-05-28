@@ -11,10 +11,12 @@ const CSS_HANDLES = ['minicartIconContainer', 'minicartQuantityBadge'] as const
 
 interface MinicartIconButtonProps {
   quantityDisplay: MinicartIconButtonType
+  viewBox?: string
 }
 
 const MinicartIconButton: FC<MinicartIconButtonProps> = ({
   quantityDisplay,
+  viewBox,
 }) => {
   const { orderForm, loading }: OrderFormContext = useOrderForm()
   const handles = useCssHandles(CSS_HANDLES)
@@ -49,7 +51,11 @@ const MinicartIconButton: FC<MinicartIconButtonProps> = ({
     <ButtonWithIcon
       icon={
         <span className={`${handles.minicartIconContainer} gray relative`}>
-          <IconCart />
+          {viewBox !== undefined ? (
+            <IconCart viewBox={viewBox} />
+          ) : (
+            <IconCart />
+          )}
           {showQuantityBadge && (
             <span
               style={{ userSelect: 'none' }}
