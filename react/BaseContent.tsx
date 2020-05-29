@@ -35,22 +35,38 @@ const CSS_HANDLES = [
   'minicartProductListContainer',
   'minicartTitle',
   'minicartTitleIcon',
+  'minicartTitleCount',
   'minicartFooter',
 ] as const
+
+const QuantItens = (total: number, spanClass: string) => {
+  const texto = total > 1 ? 'itens' : 'item'
+  return total ? (
+    <span className={spanClass}>
+      ( {total} {texto} )
+    </span>
+  ) : (
+    ''
+  )
+}
 
 // eslint-disable-next-line react/display-name
 const MinicartHeader: FC<{
   minicartTitleHandle: string
   minicartTitleHandleIcon: string
+  minicartTitleHandleCounter: string
   iconHeader: boolean
   iconHeaderViewBox?: string
+  totalItems: number
   // eslint-disable-next-line react/display-name
 }> = memo(
   ({
     minicartTitleHandle,
     minicartTitleHandleIcon,
+    minicartTitleHandleCounter,
     iconHeader,
     iconHeaderViewBox,
+    totalItems,
   }) => {
     return (
       <h3
@@ -66,6 +82,7 @@ const MinicartHeader: FC<{
           </span>
         )}
         <FormattedMessage id="store/minicart.title" />
+        {QuantItens(totalItems, minicartTitleHandleCounter)}
       </h3>
     )
   }
@@ -127,8 +144,10 @@ const Content: FC<Props> = ({
         <MinicartHeader
           minicartTitleHandle={handles.minicartTitle}
           minicartTitleHandleIcon={handles.minicartTitleIcon}
+          minicartTitleHandleCounter={handles.minicartTitleCount}
           iconHeader={iconHeader}
           iconHeaderViewBox={cartIconProps?.viewBox}
+          totalItems={orderForm.items.length}
         />
         <ExtensionPoint id="minicart-empty-state" />
       </Fragment>
@@ -144,8 +163,10 @@ const Content: FC<Props> = ({
           <MinicartHeader
             minicartTitleHandle={handles.minicartTitle}
             minicartTitleHandleIcon={handles.minicartTitleIcon}
+            minicartTitleHandleCounter={handles.minicartTitleCount}
             iconHeader={iconHeader}
             iconHeaderViewBox={cartIconProps?.viewBox}
+            totalItems={orderForm.items.length}
           />
           <ExtensionPoint id="minicart-product-list" />
         </div>
@@ -162,8 +183,10 @@ const Content: FC<Props> = ({
       <MinicartHeader
         minicartTitleHandle={handles.minicartTitle}
         minicartTitleHandleIcon={handles.minicartTitleIcon}
+        minicartTitleHandleCounter={handles.minicartTitleCount}
         iconHeader={iconHeader}
         iconHeaderViewBox={cartIconProps?.viewBox}
+        totalItems={orderForm.items.length}
       />
       {Children.map(children, child =>
         React.cloneElement(child as ReactElement, { renderAsChildren: true })

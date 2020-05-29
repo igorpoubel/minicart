@@ -25,6 +25,9 @@
   right: 7px;
 }
 
+.minicartTitleCount {
+  font-size: 1rem;
+}
 .minicartTitleIcon {
   display: inline-flex;
 }
