@@ -34,7 +34,8 @@
     "vtex.store-drawer": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-drawer@0.6.1/public/@types/vtex.store-drawer",
     "vtex.store-graphql": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-graphql@2.113.6/public/@types/vtex.store-graphql",
     "vtex.store-icons": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-icons@0.15.0/public/@types/vtex.store-icons",
-    "vtex.store-resources": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-resources@0.43.0/public/_types/react"
+    "vtex.store-resources": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.store-resources@0.43.0/public/_types/react",
+    "vtex.formatted-price": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.formatted-price@0.3.2/public/@types/vtex.formatted-price"
   },
   "dependencies": {
     "apollo-client": "2.6.4",

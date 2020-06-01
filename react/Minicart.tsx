@@ -20,6 +20,7 @@ interface MinicartProps {
   maxDrawerWidth: number | string
   drawerSlideDirection: SlideDirectionType
   quantityDisplay: MinicartIconButtonType
+  showTotalizer: boolean
   backdropMode?: MaybeResponsiveValue<BackdropMode>
 }
 
@@ -29,6 +30,7 @@ const Minicart: FC<MinicartProps> = ({
   linkVariationUrl,
   maxDrawerWidth = 400,
   quantityDisplay = 'not-empty',
+  showTotalizer = false,
   drawerSlideDirection = 'rightToLeft',
 }) => {
   const handles = useCssHandles(CSS_HANDLES)
@@ -42,7 +44,10 @@ const Minicart: FC<MinicartProps> = ({
       >
         <div className={`${handles.minicartContainer} flex flex-column`}>
           <a href={linkVariationUrl || checkoutUrl}>
-            <MinicartIconButton quantityDisplay={quantityDisplay} />
+            <MinicartIconButton
+              quantityDisplay={quantityDisplay}
+              showTotalizer={showTotalizer}
+            />
           </a>
         </div>
       </aside>
@@ -60,6 +65,7 @@ const Minicart: FC<MinicartProps> = ({
             maxDrawerWidth={maxDrawerWidth}
             drawerSlideDirection={drawerSlideDirection}
             quantityDisplay={quantityDisplay}
+            showTotalizer={showTotalizer}
           >
             {children}
           </DrawerMode>

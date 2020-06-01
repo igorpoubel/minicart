@@ -12,6 +12,7 @@ interface Props {
   maxDrawerWidth: number | string
   drawerSlideDirection: SlideDirectionType
   quantityDisplay: 'always' | 'never' | 'not-empty'
+  showTotalizer: boolean
   backdropMode?: MaybeResponsiveValue<BackdropMode>
 }
 
@@ -19,6 +20,7 @@ const DrawerMode: FC<Props> = ({
   children,
   maxDrawerWidth,
   quantityDisplay,
+  showTotalizer,
   drawerSlideDirection,
   backdropMode = 'visible',
 }) => {
@@ -28,7 +30,12 @@ const DrawerMode: FC<Props> = ({
       maxWidth={maxDrawerWidth}
       backdropMode={backdropMode}
       slideDirection={drawerSlideDirection}
-      customIcon={<MinicartIconButton quantityDisplay={quantityDisplay} />}
+      customIcon={
+        <MinicartIconButton
+          quantityDisplay={quantityDisplay}
+          showTotalizer={showTotalizer}
+        />
+      }
     >
       <div
         className={`${handles.minicartSideBarContentWrapper} w-100 h-100`}
