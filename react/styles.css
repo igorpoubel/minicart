@@ -29,3 +29,14 @@
 .popupArrowUp {
   right: 7px;
 }
+
+.minicartTitleCount {
+  font-size: 1rem;
+}
+.minicartTitleIcon {
+  display: inline-flex;
+}
+.minicartTitleIcon .cartIcon {
+  width: 22px;
+  height: 22px;
+}

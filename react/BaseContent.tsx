@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl'
 import { ExtensionPoint, useTreePath, useRuntime } from 'vtex.render-runtime'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
 import { useCssHandles } from 'vtex.css-handles'
+import { IconCart } from 'vtex.store-icons'
 
 import { useMinicartState } from './MinicartContext'
 import styles from './styles.css'
@@ -20,6 +21,7 @@ import CheckoutButton from './CheckoutButton'
 interface Props {
   sideBarMode: boolean
   finishShoppingButtonLink: string
+  iconHeader?: boolean
 }
 
 interface BlocksFromExtension {
@@ -32,25 +34,69 @@ const CSS_HANDLES = [
   'minicartContentContainer',
   'minicartProductListContainer',
   'minicartTitle',
+  'minicartTitleIcon',
+  'minicartTitleCount',
   'minicartFooter',
 ] as const
 
-// eslint-disable-next-line react/display-name
-const MinicartHeader: FC<{ minicartTitleHandle: string }> = memo(
-  ({ minicartTitleHandle }) => (
-    <h3
-      className={`${minicartTitleHandle} t-heading-3 mv2 ph4 ph6-l c-on-base`}
-    >
-      <FormattedMessage id="store/minicart.title" />
-    </h3>
+const QuantItens = (total: number, spanClass: string) => {
+  const texto = total > 1 ? 'itens' : 'item'
+  return total ? (
+    <span className={spanClass}>
+      ( {total} {texto} )
+    </span>
+  ) : (
+    ''
   )
+}
+
+// eslint-disable-next-line react/display-name
+const MinicartHeader: FC<{
+  minicartTitleHandle: string
+  minicartTitleHandleIcon: string
+  minicartTitleHandleCounter: string
+  iconHeader: boolean
+  iconHeaderViewBox?: string
+  totalItems: number
+  // eslint-disable-next-line react/display-name
+}> = memo(
+  ({
+    minicartTitleHandle,
+    minicartTitleHandleIcon,
+    minicartTitleHandleCounter,
+    iconHeader,
+    iconHeaderViewBox,
+    totalItems,
+  }) => {
+    return (
+      <h3
+        className={`${minicartTitleHandle} t-heading-3 mv2 ph4 ph6-l c-on-base`}
+      >
+        {iconHeader === true && (
+          <span className={`${minicartTitleHandleIcon} pr3`}>
+            {iconHeaderViewBox === undefined ? (
+              <IconCart />
+            ) : (
+              <IconCart viewBox={iconHeaderViewBox} />
+            )}
+          </span>
+        )}
+        <FormattedMessage id="store/minicart.title" />
+        {QuantItens(totalItems, minicartTitleHandleCounter)}
+      </h3>
+    )
+  }
 )
 
-const Content: FC<Props> = ({ finishShoppingButtonLink, children }) => {
+const Content: FC<Props> = ({
+  finishShoppingButtonLink,
+  children,
+  iconHeader = false,
+}) => {
   const { orderForm, loading }: OrderFormContext = useOrderForm()
   const push = useDebouncedPush()
   const handles = useCssHandles(CSS_HANDLES)
-  const { variation } = useMinicartState()
+  const { variation, cartIconProps } = useMinicartState()
   const { extensions } = useRuntime()
   const { treePath } = useTreePath()
 
@@ -95,7 +141,14 @@ const Content: FC<Props> = ({ finishShoppingButtonLink, children }) => {
   if (isCartEmpty) {
     return (
       <Fragment>
-        <MinicartHeader minicartTitleHandle={handles.minicartTitle} />
+        <MinicartHeader
+          minicartTitleHandle={handles.minicartTitle}
+          minicartTitleHandleIcon={handles.minicartTitleIcon}
+          minicartTitleHandleCounter={handles.minicartTitleCount}
+          iconHeader={iconHeader}
+          iconHeaderViewBox={cartIconProps?.viewBox}
+          totalItems={orderForm.items.length}
+        />
         <ExtensionPoint id="minicart-empty-state" />
       </Fragment>
     )
@@ -107,7 +160,14 @@ const Content: FC<Props> = ({ finishShoppingButtonLink, children }) => {
         <div
           className={`w-100 h-100 overflow-y-auto ${handles.minicartProductListContainer}`}
         >
-          <MinicartHeader minicartTitleHandle={handles.minicartTitle} />
+          <MinicartHeader
+            minicartTitleHandle={handles.minicartTitle}
+            minicartTitleHandleIcon={handles.minicartTitleIcon}
+            minicartTitleHandleCounter={handles.minicartTitleCount}
+            iconHeader={iconHeader}
+            iconHeaderViewBox={cartIconProps?.viewBox}
+            totalItems={orderForm.items.length}
+          />
           <ExtensionPoint id="minicart-product-list" />
         </div>
         <div className={minicartFooterClasses}>
@@ -120,7 +180,14 @@ const Content: FC<Props> = ({ finishShoppingButtonLink, children }) => {
 
   return (
     <div className={minicartContentClasses}>
-      <MinicartHeader minicartTitleHandle={handles.minicartTitle} />
+      <MinicartHeader
+        minicartTitleHandle={handles.minicartTitle}
+        minicartTitleHandleIcon={handles.minicartTitleIcon}
+        minicartTitleHandleCounter={handles.minicartTitleCount}
+        iconHeader={iconHeader}
+        iconHeaderViewBox={cartIconProps?.viewBox}
+        totalItems={orderForm.items.length}
+      />
       {Children.map(children, child =>
         React.cloneElement(child as ReactElement, { renderAsChildren: true })
       )}

@@ -21,6 +21,7 @@ interface MinicartProps {
   drawerSlideDirection: SlideDirectionType
   quantityDisplay: MinicartIconButtonType
   showTotalizer: boolean
+  iconProps?: MinicartIconProps
   backdropMode?: MaybeResponsiveValue<BackdropMode>
 }
 
@@ -31,6 +32,7 @@ const Minicart: FC<MinicartProps> = ({
   maxDrawerWidth = 400,
   quantityDisplay = 'not-empty',
   showTotalizer = false,
+  iconProps,
   drawerSlideDirection = 'rightToLeft',
 }) => {
   const handles = useCssHandles(CSS_HANDLES)
@@ -47,6 +49,7 @@ const Minicart: FC<MinicartProps> = ({
             <MinicartIconButton
               quantityDisplay={quantityDisplay}
               showTotalizer={showTotalizer}
+              viewBox={iconProps?.viewBox}
             />
           </a>
         </div>
@@ -65,12 +68,16 @@ const Minicart: FC<MinicartProps> = ({
             maxDrawerWidth={maxDrawerWidth}
             drawerSlideDirection={drawerSlideDirection}
             quantityDisplay={quantityDisplay}
-            showTotalizer={showTotalizer}
           >
             {children}
           </DrawerMode>
         ) : (
-          <PopupMode quantityDisplay={quantityDisplay}>{children}</PopupMode>
+          <PopupMode
+            quantityDisplay={quantityDisplay}
+            iconButtonViewBox={iconProps?.viewBox}
+          >
+            {children}
+          </PopupMode>
         )}
       </div>
     </aside>
@@ -90,6 +97,7 @@ const EnhancedMinicart = (props: MinicartProps) => (
   <MinicartContextProvider
     variation={props.variation}
     openOnHover={props.openOnHover}
+    cartIconProps={props.iconProps}
   >
     <CartIdPixel />
     <Minicart {...props} />

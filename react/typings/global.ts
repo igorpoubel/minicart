@@ -1,5 +1,9 @@
 type MinicartIconButtonType = 'always' | 'never' | 'not-empty'
 
+interface MinicartIconProps {
+  viewBox: string
+}
+
 type SlideDirectionType =
   | 'horizontal'
   | 'vertical'
